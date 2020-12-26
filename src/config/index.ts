@@ -1,0 +1,47 @@
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+
+const MONGO_OPTIONS = {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+    socketTimeoutMS: 30000,
+    keepAlive: true,
+    poolSize: 50,
+    autoIndex: false,
+    retryWrites: false
+};
+
+const MONGO_USERNAME = process.env.MONGO_USERNAME || '';
+const MONGO_PASSWORD = process.env.MONGO_PASSWORD || '';
+const MONGO_HOST = process.env.MONGO_URL || `localhost:27017/sample`;
+
+const mongoURL = (host: string, username: string, password: string, options: any) : string => {
+    if(username) {
+        return `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}`
+    }
+    return `mongodb://${MONGO_HOST}`
+}
+
+const MONGO = {
+    host: MONGO_HOST,
+    password: MONGO_PASSWORD,
+    username: MONGO_USERNAME,
+    options: MONGO_OPTIONS,
+    url: mongoURL(MONGO_HOST, MONGO_USERNAME, MONGO_PASSWORD, MONGO_OPTIONS)
+};
+
+const SERVER_HOSTNAME = process.env.SERVER_HOSTNAME || 'localhost';
+const SERVER_PORT = process.env.SERVER_PORT || 1337;
+
+const SERVER = {
+    hostname: SERVER_HOSTNAME,
+    port: SERVER_PORT
+};
+
+const index = {
+    mongo: MONGO,
+    server: SERVER
+};
+
+export default index;
